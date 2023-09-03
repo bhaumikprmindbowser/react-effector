@@ -1,5 +1,6 @@
 import { createStore, createEvent } from 'effector';
 import { v4 as uuidv4 } from "uuid";
+import { fetchTodosFx } from './todo';
 
 export const addInProgressTodo = createEvent();
 export const removeInProgressTodo = createEvent();
@@ -10,6 +11,10 @@ export const updateInProgressTodo = createEvent();
 export const $inProgressTodos = createStore([]) // Initial state is an empty array
 
 $inProgressTodos
+    .on(fetchTodosFx.done, (todos, { result = [] }) => {
+        const todoSlice = result.slice(20, 25).map(todo => ({ ...todo, id: uuidv4(), text: todo.title, isFinished: Math.random() >= 0.5, createdAt: new Date().toLocaleString() }))
+        return [...todos, ...todoSlice]
+    })
     .on(addInProgressTodo, (todos, text) => [...todos, {
         id: uuidv4(),
         text,
