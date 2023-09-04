@@ -1,19 +1,21 @@
 import { createStore, createEvent } from 'effector';
-import { createEffect } from 'effector';
+import { createEffect, createDomain } from 'effector';
 import { v4 as uuidv4 } from "uuid";
 
-export const addTodo = createEvent();
-export const removeTodo = createEvent();
-export const completeStatusTodo = createEvent();
-export const reorderTodo = createEvent();
-export const updateTodo = createEvent();
+const todoDomain = createDomain('todo') // Named domain
 
-export const fetchTodosFx = createEffect(async () => {
+export const addTodo = todoDomain.createEvent();
+export const removeTodo = todoDomain.createEvent();
+export const completeStatusTodo = todoDomain.createEvent();
+export const reorderTodo = todoDomain.createEvent();
+export const updateTodo = todoDomain.createEvent();
+
+export const fetchTodosFx = todoDomain.createEffect(async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos');
     return response.json();
 });
 
-export const $todos = createStore([]) // Initial state is an empty array
+export const $todos = todoDomain.createStore([]) // Initial state is an empty array
 
 $todos
     .on(fetchTodosFx.done, (todos, { result = [] }) => {

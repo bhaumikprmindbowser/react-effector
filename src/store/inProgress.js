@@ -1,14 +1,16 @@
-import { createStore, createEvent } from 'effector';
+import { createStore, createEvent, createDomain } from 'effector';
 import { v4 as uuidv4 } from "uuid";
 import { fetchTodosFx } from './todo';
 
-export const addInProgressTodo = createEvent();
-export const removeInProgressTodo = createEvent();
-export const completeStatusInProgressTodo = createEvent();
-export const reorderInProgressTodo = createEvent();
-export const updateInProgressTodo = createEvent();
+const inProgressTodoDomain = createDomain('inProgressTodo') // Named domain
 
-export const $inProgressTodos = createStore([]) // Initial state is an empty array
+export const addInProgressTodo = inProgressTodoDomain.createEvent();
+export const removeInProgressTodo = inProgressTodoDomain.createEvent();
+export const completeStatusInProgressTodo = inProgressTodoDomain.createEvent();
+export const reorderInProgressTodo = inProgressTodoDomain.createEvent();
+export const updateInProgressTodo = inProgressTodoDomain.createEvent();
+
+export const $inProgressTodos = inProgressTodoDomain.createStore([]) // Initial state is an empty array
 
 $inProgressTodos
     .on(fetchTodosFx.done, (todos, { result = [] }) => {

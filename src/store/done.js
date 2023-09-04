@@ -1,13 +1,16 @@
-import { createStore, createEvent } from 'effector';
+import { createStore, createEvent, createDomain } from 'effector';
 import { v4 as uuidv4 } from "uuid";
 
-export const addDoneTodo = createEvent();
-export const removeDoneTodo = createEvent();
-export const completeStatusDoneTodo = createEvent();
-export const reorderDoneTodo = createEvent();
-export const updateDoneTodo = createEvent();
+const doneTodoDomain = createDomain('doneTodo') // Named domain
 
-export const $doneTodos = createStore([]) // Initial state is an empty array
+export const addDoneTodo = doneTodoDomain.createEvent();
+export const removeDoneTodo = doneTodoDomain.createEvent();
+export const completeStatusDoneTodo = doneTodoDomain.createEvent();
+export const reorderDoneTodo = doneTodoDomain.createEvent();
+export const updateDoneTodo = doneTodoDomain.createEvent();
+
+
+export const $doneTodos = doneTodoDomain.createStore([]) // Initial state is an empty array
 
 $doneTodos
     .on(addDoneTodo, (todos, text) => [...todos, {
